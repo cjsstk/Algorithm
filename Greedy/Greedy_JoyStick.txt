@@ -1,0 +1,56 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int solution(string name) {
+    int answer = 0;
+
+    vector<bool> Visited(name.length(), false);
+
+    // Verical Move
+    for (int i = 0; i < name.length(); i++)
+    {
+        int CurrentChar = name[i];
+
+        if (CurrentChar == 65)
+        {
+            Visited[i] = true;
+            continue;
+        }
+
+        // a = 65, z = 90
+        answer += min(CurrentChar - 65, 91 - CurrentChar);
+    }
+
+    // Horizontal Move
+    int CurrentIndex = 0;
+    Visited[CurrentIndex] = true;
+
+    // Until visit all position
+    while (find(Visited.begin(), Visited.end(), false) != end(Visited))
+    {
+        int NearestIndex = 0;
+        int NearestDist = Visited.size();
+        for (int i = 0; i < Visited.size(); i++)
+        {
+            // Find all not visited position
+            if (Visited[i] == false)
+            {
+                int MinDist = min(abs(i - CurrentIndex), (int)Visited.size() - abs(i - CurrentIndex));
+                if (MinDist < NearestDist)
+                {
+                    NearestIndex = i;
+                    NearestDist = MinDist;
+                }
+            }
+        }
+
+        CurrentIndex = NearestIndex;
+        answer += NearestDist;
+        Visited[CurrentIndex] = true;
+    }
+
+    return answer;
+}
